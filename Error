@@ -1,0 +1,27 @@
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<ipython-input-7-daeb08264590> in <module>()
+      6 # and then selecting matrix.py
+      7 
+----> 8 import test
+
+/home/workspace/test.py in <module>()
+     75     return True
+     76 
+---> 77 test()
+
+/home/workspace/test.py in test()
+     54     assert equal(-I2, I2_neg), "Error in your __neg__ function"
+     55     assert equal(I2 + I2_neg, zero), "Error in your __add__ function"
+---> 56     assert equal(m1 * m2, m1_x_m2), "Error in your __mul__ function"
+     57     assert equal(m2 * m1, m2_x_m1), "Error in your __mul__ function"
+     58     assert equal(m1_x_m2.inverse(), m1_m2_inv), """Error in your inverse function for the 1 x 1 case"""
+
+/home/workspace/matrix.py in __mul__(self, other)
+    217             for i in range(self.h):
+    218                 multi_row=[]
+--> 219                 for j in range(other_T.h):
+    220                     multi_element=vector_multi(self.h[i],other_T.h[j])  # use the function defined in the begining of the project for vector multiplication
+    221                     multi_row.append(multi_element)
+
+AttributeError: 'function' object has no attribute 'h'
