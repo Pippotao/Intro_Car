@@ -6,8 +6,8 @@ def zeroes(height, width):
         """
         Creates a matrix of zeroes.
         """
-        g = [[0.0 for x in range(width)] for x in range(height)] # can't use g=[[0.0 for 0.0 in range(width)]]
-        return Matrix(g)   # why don't use return g ???
+        g = [[0.0 for x in range(width)] for x in range(height)] 
+        return Matrix(g)   
 
 def identity(n):
         """
@@ -17,6 +17,17 @@ def identity(n):
         for i in range(n):
             I.g[i][i] = 1.0
         return I
+    
+def vector_multi(vectorA, vectorB):              # this function is for matrix multiplication function later
+    if len(vectorA)!= len(vectorB):
+        raise(NotImplementedError, "Can not mulitpy vectors with different column quantity")
+    else:
+        vector_multi_row=[]
+        for i in range(len(vector)):
+            vector_multi_element=vectorA[i]*vectorB[i]
+            vector_multi_row.append(vector_multi_element)
+        vector_multi=sum(vector_multi_row)
+        return vector_multi
 
 class Matrix(object):
 
@@ -84,7 +95,7 @@ class Matrix(object):
             row_element.append(0)
             row_element.append((self.g[0][0]*self.g[1][1]-self.g[0][1]*self.g[1][0])*(1/self.determinant()))
             inverse.append(row_element) # the second row of the inverse matrix
-            return inverse
+            return Matrix(inverse)
                   
 
     def T(self):
@@ -98,7 +109,7 @@ class Matrix(object):
             for j in range(len(self.w)):
                 t_column.append(self.g[self.w][self.h]) # get each column of the target Matrix
             trans.append(t_column)                # to be each row of the transposed Matrix
-        return trans
+        return Matrix(trans)
 
     def is_square(self):
         return self.h == self.w
@@ -148,7 +159,7 @@ class Matrix(object):
                 for j in range(self.w):
                     added_row.append(self.g[i][j]+other.g[i][j])
                 added_matrix.append(added_row)
-            return added_matrix
+            return Matrix(added_matrix)
             
     def __neg__(self):
         """
@@ -171,7 +182,7 @@ class Matrix(object):
             for j in range (self.w):
                 neg_row.append(-1*self.g[i][j])
             neg_matrix.append(neg_row)
-        return neg_matrix    
+        return Matrix(neg_matrix)    
 
     def __sub__(self, other):
         """
@@ -189,7 +200,7 @@ class Matrix(object):
                 for j in range(self.w):
                     subtracted_row.append(self.g[i][j]-other.g[i][j])
                 subtracted_matrix.append(subtracted_row)
-            return subtracted_matrix
+            return Matrix(subtracted_matrix)
         
     def __mul__(self, other):
         """
@@ -198,6 +209,20 @@ class Matrix(object):
         #   
         # TODO - your code here
         #
+        if self.w != other.h:
+            raise(ValueError, "Matrices can only be multipied if the columns of first matrix equal to the rows of second matrix") 
+        if self.w == other.h:
+            other_T=other.T                   # get tranposed matrix of other matrix
+            multi_matrix=[]
+            for i in range(self.h):
+                multi_row=[]
+                for j in range(other_T.h):
+                    multi_element=vector_multi(self.h[i],other_T.h[j])  # use the function defined in the begining of the project for vector multiplication
+                    multi_row.append(multi_element)
+                multi_matrix.append(multi_row)
+            return Martix(multi_matrix)     
+            
+            
 
     def __rmul__(self, other):
         """
@@ -216,4 +241,11 @@ class Matrix(object):
             #   
             # TODO - your code here
             #
-            
+            rmul_matrix=[]
+            for i in range(self.h):
+                rmul_row=[]
+                for j in range(self.w):
+                    rmul_element=self.g[i][j]*other
+                    rmul_row.append(rmul_element)
+                rmul_matrix.append(rmul_row)
+            return Matrix(rmul_matrix)
